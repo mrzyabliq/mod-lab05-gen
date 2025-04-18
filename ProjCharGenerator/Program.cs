@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 namespace generator
 {
-    class CharGenerator
+    public class CharGenerator
     {
         private List<string> syms = new List<string>();
         private List<int> weights = new List<int>();
@@ -42,8 +42,12 @@ namespace generator
             }
             return "";
         }
+        public int getSize()
+        {
+            return syms.Count;
+        }
     }
-    class WordGenerator
+    public class WordGenerator
     {
         private List<string> syms = new List<string>();
         private List<Double> weights = new List<Double>();
@@ -79,6 +83,10 @@ namespace generator
                 }
             }
             return "";
+        }
+        public int getSize()
+        {
+            return syms.Count;
         }
     }
     class Program
