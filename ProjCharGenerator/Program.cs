@@ -11,9 +11,9 @@ namespace generator
         private List<int> upper_bounds = new List<int>();
         private int summ;
         private Random random = new Random();
-        public CharGenerator()
+        public CharGenerator(string filename)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "bigrammweights.txt")))
+            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, filename)))
             {
                 string input;
                 string[] line;
@@ -50,9 +50,9 @@ namespace generator
         private List<Double> upper_bounds = new List<Double>();
         private Double summ;
         private Random random = new Random();
-        public WordGenerator()
+        public WordGenerator(string filename)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "wordweights.txt")))
+            using (StreamReader reader = new StreamReader(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, filename)))
             {
                 string input;
                 string[] line;
@@ -85,7 +85,7 @@ namespace generator
     {
         static void Main(string[] args)
         {
-            CharGenerator gen = new CharGenerator();
+            CharGenerator gen = new CharGenerator("bigrammweights.txt");
             SortedDictionary<string, int> stat = new SortedDictionary<string, int>();
             string result = "";
             for (int i = 0; i < 1000; i++)
@@ -102,7 +102,7 @@ namespace generator
             {
                 reader.WriteLine(result);
             }
-            WordGenerator genWord = new WordGenerator();
+            WordGenerator genWord = new WordGenerator("wordweights.txt");
             SortedDictionary<string, int> statWord = new SortedDictionary<string, int>();
             result = "";
             for (int i = 0; i < 1000; i++)
