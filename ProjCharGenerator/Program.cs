@@ -9,7 +9,7 @@ namespace generator
         private List<string> syms = new List<string>();
         private List<int> weights = new List<int>();
         private List<int> upper_bounds = new List<int>();
-        private int summ;
+        public int summ;
         private Random random = new Random();
         public CharGenerator(string filename)
         {
@@ -20,9 +20,9 @@ namespace generator
                 Int32 sum = 0;
                 while ((input = reader.ReadLine()) != null)
                 {
-                    line = input.Split(new[] { ' ', '\t' },  StringSplitOptions.RemoveEmptyEntries);
+                    line = input.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     int i = 0;
-                    syms.Add(line[i+1]);
+                    syms.Add(line[i + 1]);
                     weights.Add(Int32.Parse(line[2]));
                     sum += Int32.Parse(line[2]);
                     upper_bounds.Add(sum);
@@ -46,13 +46,14 @@ namespace generator
         {
             return syms.Count;
         }
+        public int getSymWeight(string sym) => weights[syms.FindIndex(x => x == sym)];
     }
     public class WordGenerator
     {
         private List<string> syms = new List<string>();
         private List<Double> weights = new List<Double>();
         private List<Double> upper_bounds = new List<Double>();
-        private Double summ;
+        public Double summ;
         private Random random = new Random();
         public WordGenerator(string filename)
         {
@@ -63,7 +64,7 @@ namespace generator
                 Double sum = 0;
                 while ((input = reader.ReadLine()) != null)
                 {
-                    line = input.Replace('.', ',').Split(new[] { ' ', '\t' },  StringSplitOptions.RemoveEmptyEntries);
+                    line = input.Replace('.', ',').Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
                     syms.Add(line[1]);
                     weights.Add(Double.Parse(line[4]));
                     sum += Double.Parse(line[4]);
@@ -88,6 +89,7 @@ namespace generator
         {
             return syms.Count;
         }
+        public Double getSymWeight(string sym) => weights[syms.FindIndex(x => x == sym)];
     }
     class Program
     {
@@ -116,16 +118,27 @@ namespace generator
             for (int i = 0; i < 1000; i++)
             {
                 string ch = genWord.getSym();
-                result += ch+" ";
+                result += ch + " ";
                 if (statWord.ContainsKey(ch))
                     statWord[ch]++;
                 else
-                    statWord.Add(ch, 1); Console.Write(ch+" ");
+                    statWord.Add(ch, 1); Console.Write(ch + " ");
             }
             Console.Write('\n');
             using (StreamWriter reader = new StreamWriter(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "../Results/gen-2.txt"), false, Encoding.UTF8))
             {
                 reader.WriteLine(result);
+            }
+
+            using (StreamWriter reader = new StreamWriter(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "../Results/graph_bi_data.txt"), true, Encoding.UTF8))
+            {
+                foreach (KeyValuePair<string, int> entry in stat) reader.WriteLine(entry.Key+" "+(entry.Value / 1000.0).ToString()+" " +((Double)gen.getSymWeight(entry.Key) / gen.summ).ToString());
+            }
+
+
+            using (StreamWriter reader = new StreamWriter(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "../Results/graph_word_data.txt"), true, Encoding.UTF8))
+            {
+                foreach (KeyValuePair<string, int> entry in statWord) reader.WriteLine(entry.Key+" "+(entry.Value / 1000.0).ToString()+" "+((Double)genWord.getSymWeight(entry.Key) / genWord.summ).ToString());
             }
         }
     }
